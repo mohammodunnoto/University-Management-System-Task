@@ -19,7 +19,7 @@ class Student(Person):
         self.course = course
         self.grades = []
     
-    def set_student_details(self, student_id, course):
+    def set_student_details(self):
         self.studentid = input("Please enter the student's Student ID:\n")
         self.course = input("Please enter the student's course:\n")
     
@@ -29,21 +29,83 @@ class Student(Person):
             if gradenum.isdigit():
                 for i in gradenum:
                     n = 1
-                    while True:
-                        grade = input(f"Please enter the student's grade #{n}.")
+                    while n <= int(gradenum):
+                        grade = input(f"Please enter the student's grade #{n}.\n")
                         if grade.isdigit():
-                            self.grades.append(grade)
+                            self.grades.append(int(grade))
                             n += 1
+                break
             else:
                 print("Please enter a number.")
     
     def calculate_average_grade(self):
         gradenum = len(self.grades)
         totalgrades = sum(self.grades)
-        average = totalgrades / gradenum
-        print(f"The average grade is {average}.")
+        if gradenum == 0:
+            average = "Grades Not Available"
+        else:
+            average = totalgrades / gradenum
+        print(f"The average grade is: {average}.")
         return average
 
     def get_student_summary(self):
-        av = Student.calculate_average_grade()
+        av = Student.calculate_average_grade(self)
         print(f"Name: {self.name}, Age: {self.age}, Gender: {self.gender}, Student ID: {self.studentid}, Course: {self.course}, Average Grade: {av}.")
+
+class Professor(Person):
+    def __init__(self, name, age, gender, staff_id, department, salary):
+        super().__init__(name, age, gender)
+        self.staffid = staff_id
+        self.department = department
+        self.salary = salary
+    
+    def set_professor_details(self):
+        self.staffid = input("Enter the Staff ID:\n")
+        self.department = input("Enter the department:\n")
+        self.salary = input("Enter the salary:\n")
+    
+    def give_feedback(self, Student, feedback):
+        print(f"Feedback for {Student.name}: {feedback}")
+
+    def increase_salary(self, percentage):
+        self.salary = self.salary * (1 + (percentage / 100))
+        print(f"The professor's new salary is {self.salary}.")
+        return self.salary
+    
+    def get_professor_summary(self):
+        print(f"Name: {self.name}, Age: {self.age}, Gender: {self.gender}, Staff ID: {self.staffid}, Department: {self.department}, Salary: £{self.salary}")
+    
+class Administrator(Person):
+    def __init__(self, name, age, gender, admin_id, office, years_of_service):
+        super().__init__(name, age, gender)
+        self.adminid = admin_id
+        self.office = office
+        self.yearsofservice = years_of_service
+    
+    def set_admin_details(self):
+        self.adminid = input("Enter the Admin ID:\n")
+        self.office = input("Enter the Office Location:\n")
+        self.yearsofservice = input("Enter the Years of Service:\n")
+    
+    def increment_service_years(self):
+        self.yearsofservice += 1
+        print(f"The new years of service is: {self.yearsofservice}.")
+    
+    def get_admin_summary(self):
+        print(f"Name: {self.name}, Age: {self.age}, Gender: {self.gender}, Admin ID: {self.adminid}, Office: {self.office}, Years of Service: {self.yearsofservice}")
+    
+student1 = Student("Bob", 20, "Male", "S1234", "Maths")
+student2 = Student("James", 20, "Male", "S2345", "Physics")
+professor1 = Professor("Mr Hank", 38, "Male", "P1234", "Maths", 55000)
+professor2 = Professor("Dr Kate", 54, "Female", "P2345", "Physics", 60000)
+administrator1 = Administrator("Mr Tom", 43, "Male", "A1234", "Room 101", 5)
+student1.add_grades()
+student1.calculate_average_grade()
+professor1.give_feedback(student1,"Good work")
+professor2.increase_salary(10)
+administrator1.increment_service_years()
+student1.get_student_summary()
+student2.get_student_summary()
+professor1.get_professor_summary()
+professor2.get_professor_summary()
+administrator1.get_admin_summary()
