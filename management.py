@@ -18,6 +18,7 @@ class Student(Person):
         self.studentid = student_id
         self.course = course
         self.grades = []
+        self.mentors = []
     
     def set_student_details(self):
         self.studentid = input("Please enter the student's Student ID:\n")
@@ -48,6 +49,12 @@ class Student(Person):
         print(f"The average grade is: {average}.")
         return average
 
+    def get_mentor(self, Professor):
+        if self.name in Professor.mentored_students:
+            print(f"The student is being mentored by {Professor.name}")
+        else:
+            print(f"The student is not being mentored by {Professor.name}.")
+
     def get_student_summary(self):
         av = Student.calculate_average_grade(self)
         print(f"Name: {self.name}, Age: {self.age}, Gender: {self.gender}, Student ID: {self.studentid}, Course: {self.course}, Average Grade: {av}.")
@@ -58,6 +65,8 @@ class Professor(Person):
         self.staffid = staff_id
         self.department = department
         self.salary = salary
+        self.mentored_students = []
+
     
     def set_professor_details(self):
         self.staffid = input("Enter the Staff ID:\n")
@@ -66,6 +75,16 @@ class Professor(Person):
     
     def give_feedback(self, Student, feedback):
         print(f"Feedback for {Student.name}: {feedback}")
+
+    def mentor_student(self, Student):
+        print(f"Professor {self.name} is now mentoring {Student.name} on {Student.course}.")
+        self.mentored_students.append(Student.name)
+        Student.mentors.append(self.name)
+    
+    def get_mentored_students(self):
+        for student in self.mentored_students:
+            print(f"Professor {self.name} is tutoring {student}.")
+
 
     def increase_salary(self, percentage):
         self.salary = self.salary * (1 + (percentage / 100))
@@ -109,3 +128,14 @@ student2.get_student_summary()
 professor1.get_professor_summary()
 professor2.get_professor_summary()
 administrator1.get_admin_summary()
+professor1.mentor_student(student1)
+professor2.mentor_student(student1)
+professor2.mentor_student(student2)
+professor1.get_mentored_students()
+professor2.get_mentored_students()
+student1.get_mentor(professor1)
+student1.get_mentor(professor2)
+student2.get_mentor(professor1)
+student2.get_mentor(professor2)
+professor1.get_mentored_students()
+professor2.get_mentored_students()
